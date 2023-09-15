@@ -1,0 +1,23 @@
+name: Ruby
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf
+        with:
+          ruby-version: '3.2.2'
+      - name: Install dependencies
+        run: bundle install
+      - name: Run tests
+        run: bundle exec rspec ./spec/*
