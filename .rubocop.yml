@@ -1,13 +1,109 @@
 AllCops:
   TargetRubyVersion: 3.2.2
 
+# 日本語コメントを許可します。
+Style/AsciiComments:
+  Enabled: false
+# classの前にコメントで説明を追加しなくてもよくする
+Style/Documentation:
+  Enabled: false
+# <<~の後にEOSを書くのを許す
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+
+
 Style/StringLiterals:
-  Enabled: true
-  EnforcedStyle: double_quotes
+  Enabled: false
 
 Style/StringLiteralsInInterpolation:
-  Enabled: true
-  EnforcedStyle: double_quotes
+  Enabled: false
 
 Layout/LineLength:
-  Max: 120
+  Max: 150
+
+Metrics/MethodLength:
+  CountComments: false
+  Max: 50
+
+Metrics/BlockLength:
+  Max: 50
+  Exclude:
+    - "spec/**/*"
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/ClassLength:
+  Max: 1700 # Default 100
+  
+Metrics/ParameterLists:
+  Max: 20
+  MaxOptionalParameters: 22
+
+Metrics/CyclomaticComplexity:
+  Max: 900 # Default 6
+Metrics/PerceivedComplexity:
+  Max: 900 # Default 6
+
+Naming/MethodParameterName:
+  Enabled: false
+
+Naming/RescuedExceptionsVariableName:
+  Enabled: false
+
+Style/AndOr:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Style/Semicolon:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
+  SpaceBeforeBlockParameters: false
+
+Layout/FirstArrayElementIndentation:
+  Enabled: true
+  EnforcedStyle: consistent
+
+Layout/FirstHashElementIndentation:
+  Enabled: true
+  EnforcedStyle: consistent
+
+Style/FrozenStringLiteralComment:
+  SafeAutoCorrect: true # 本来は false だけど最初からすべてが frozen_string_literal 前提で開発を進めるので問題ない
+  Exclude:
+    - "db/migrate/*.rb"
+
+Lint/UselessAccessModifier:
+  ContextCreatingMethods:
+    - included
+    - class_methods
+
+Naming/VariableNumber:
+  Enabled: false # Default true report-infra_client と合わせるために設定
+
+Layout/TrailingEmptyLines:
+  Enabled: true
+  EnforcedStyle: final_newline
+
+# https://freee.slack.com/archives/CBC4CUHPV/p1678276628653159
+Style/HashSyntax:
+  EnforcedShorthandSyntax: either
