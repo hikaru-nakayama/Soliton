@@ -16,5 +16,5 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">=3.2.2"
   s.metadata["rubygems_mfa_required"] = "true"
   s.metadata["github_repo"] = "https://github.com/hikaru-nakayama/soliton"
-  # s.executables = "soliton"
+  s.executables = "soliton"
 end

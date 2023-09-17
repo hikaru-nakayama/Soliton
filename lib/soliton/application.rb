@@ -6,6 +6,7 @@ module Soliton
     end
 
     def call(env)
+      # ここで CORS などの middoleware の実行を行う
       @router.call(env)
     end
   end
