@@ -1,8 +1,12 @@
 module Soliton
   # Rackアプリケーション
   class Application
+    def initialize(router)
+      @router = router
+    end
+
     def call(env)
-      [200, { "Content-Type" => "text/html" }, ["Hello, World!"]]
+      @router.call(env)
     end
   end
 end
