@@ -1,8 +1,7 @@
 # frozen_string_literal: true
-require_relative "http/responder"
-require_relative "http/request_parser"
+require "soliton/http/responder"
+require "soliton/http/request_parser"
 require "socket"
-require "pry"
 
 module Soliton
   class Server
