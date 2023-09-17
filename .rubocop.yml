@@ -87,10 +87,10 @@ Layout/FirstHashElementIndentation:
   Enabled: true
   EnforcedStyle: consistent
 
-Style/FrozenStringLiteralComment:
-  SafeAutoCorrect: true # 本来は false だけど最初からすべてが frozen_string_literal 前提で開発を進めるので問題ない
-  Exclude:
-    - "db/migrate/*.rb"
+# Style/FrozenStringLiteralComment:
+#   SafeAutoCorrect: true # 本来は false だけど最初からすべてが frozen_string_literal 前提で開発を進めるので問題ない
+#   Exclude:
+#     - "db/migrate/*.rb"
 
 Lint/UselessAccessModifier:
   ContextCreatingMethods:
