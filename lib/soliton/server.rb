@@ -2,7 +2,7 @@
 require "soliton/http/responder"
 require "soliton/http/request_parser"
 require "socket"
-
+require "soliton/logger"
 module Soliton
   class Server
     PORT = ENV.fetch("PORT", 3000)
@@ -16,14 +16,16 @@ module Soliton
 
     def start
       socket = listen_on_socket
+      logger = Logger.new($stdout)
 
+      logger.info "Soliton is running on #{HOST}:#{PORT}"
       loop do # 新しいコネクションを継続的にリッスンする
         conn, _addr_info = socket.accept
         request = Http::RequestParser.call(conn)
         status, headers, body = app.call(request)
         Http::Responder.call(conn, status, headers, body)
       rescue StandardError => e
-        puts e.message
+        logger.error e
       ensure # コネクションを常にクローズする
         conn&.close
       end
