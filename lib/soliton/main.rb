@@ -14,5 +14,3 @@ module Soliton
     end
   end
 end
-
-Soliton::App.start
