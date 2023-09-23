@@ -27,6 +27,7 @@ module Soliton
       rescue StandardError => e
         logger.error e
       ensure # コネクションを常にクローズする
+        logger.info "Completed #{status} #{Http::Responder::STATUS_MESSAGES[status]}"
         conn&.close
       end
     end
