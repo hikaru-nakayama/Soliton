@@ -1,5 +1,7 @@
 # please add general patterns to your global ignore list
 # see https://github.com/github/gitignore#readme
+Makefile
+.vscode/
 /Gemfile.lock
 vendor
 *.gem
