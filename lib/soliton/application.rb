@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+require "singleton"
 module Soliton
   # Rackアプリケーション
   class Application
@@ -7,7 +9,17 @@ module Soliton
 
     def call(env)
       # ここで CORS などの middoleware の実行を行う
+      Soliton::Context.instance.init(env)
       @router.call(env)
+    end
+  end
+
+  class Context
+    include Singleton
+    attr_accessor :context
+
+    def init(env)
+      @context = env
     end
   end
 end
