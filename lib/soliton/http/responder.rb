@@ -6,22 +6,22 @@ module Soliton
       def self.call(conn, status, headers, body)
         # ステータス行
         status_text = STATUS_MESSAGES[status]
-        conn.send("HTTP/1.1 #{status} #{status_text}\r\n", 0)
+        conn.write("HTTP/1.1 #{status} #{status_text}\r\n")
 
         content_length = body.sum(&:length)
-        conn.send("Content-Length: #{content_length}\r\n", 0)
+        conn.write("Content-Length: #{content_length}\r\n")
         headers.each_pair do |name, value|
-          conn.send("#{name}: #{value}\r\n", 0)
+          conn.write("#{name}: #{value}\r\n")
         end
 
         # コネクションを開きっぱなしにしたくないことを伝える
-        conn.send("Connection: close\r\n", 0)
+        conn.write("Connection: close\r\n")
 
         # ヘッダーと本文の間を空行で区切る
-        conn.send("\r\n", 0)
+        conn.write("\r\n")
 
         # 本文
-        body.each { |chunk| conn.send(chunk, 0) }
+        body.each { |chunk| conn.write(chunk) }
       end
     end
   end
