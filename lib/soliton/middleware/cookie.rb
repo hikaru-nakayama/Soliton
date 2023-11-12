@@ -23,13 +23,13 @@ module Soliton
     end
   end
 
-   module Cookies
-      def cookies
-         # TODO request の取得方法を変更する
-         request = Soliton::Context.instance.context
-         request['soliton.cookies']
-      end
-   end
+  module Cookies
+    def cookies
+      # TODO: request の取得方法を変更する
+      request = Soliton::Context.instance.context
+      request['soliton.cookies']
+    end
+  end
 
   class CookieJar
     def self.build(req, cookies)
@@ -53,7 +53,6 @@ module Soliton
 
     def []=(name, options)
       if options.is_a?(Hash)
-        options.symbolize_keys!
         value = options[:value]
       else
         value = options
@@ -74,7 +73,10 @@ module Soliton
     end
 
     def to_header
-      @set_cookies.map {|k, v| "#{k}=#{v}" }.join "; "
+      @set_cookies.map do |name, options|
+        formatted_options = options.except(:value).map { |key, value| "#{key}=#{value}" }.join("; ")
+        "#{name}=#{options[:value]}; #{formatted_options}"
+      end
     end
   end
 end
