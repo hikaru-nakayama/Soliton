@@ -11,7 +11,13 @@ module Soliton
         content_length = body.sum(&:length)
         conn.write("Content-Length: #{content_length}\r\n")
         headers.each_pair do |name, value|
-          conn.write("#{name}: #{value}\r\n")
+          if value.is_a?(Array)
+            value.each do |v|
+              conn.write("#{name}: #{v}\r\n")
+            end
+          else 
+            conn.write("#{name}: #{value}\r\n")
+          end
         end
 
         # コネクションを開きっぱなしにしたくないことを伝える
