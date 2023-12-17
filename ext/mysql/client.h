@@ -1,0 +1,1 @@
+void init_mysql2_client(void);
