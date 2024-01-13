@@ -12,6 +12,22 @@ module Soliton
       Soliton::Context.instance.init(env)
       @router.call(env)
     end
+
+    class Configuration
+      include Singleton
+      attr_accessor :root
+
+      def initialize
+        @root = Dir.pwd
+      end
+    end
+
+    class << self
+      def config
+        Configuration.instance
+      end
+    end
+
   end
 
   class Context

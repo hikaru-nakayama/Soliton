@@ -9,6 +9,15 @@ module Soliton
     def self.start
       # Rack app の初期化
       app = Application.new(Router.instance)
+
+      # config を読み込む
+      config_dir = File.expand_path('config', Dir.pwd)
+      Dir["#{config_dir}/**/*.rb"].each do |file|
+        next if File.directory?(file)
+
+        require file
+      end
+
       # サーバーの起動
       server = Server.new(app)
       server.start
