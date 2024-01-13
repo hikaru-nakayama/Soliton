@@ -22,6 +22,10 @@ module Soliton
     def call(env)
       endpoint, params = lookup(env)
 
+      unless endpoint
+        return [404, {}, ["Not Found"]]
+      end
+
       endpoint.call(_params(env, params)).to_a
     end
 
@@ -76,20 +80,14 @@ module Soliton
       params ||= {}
       env[PARAMS] ||= {}
 
-      if !env.key?(ROUTER_PARSED_BODY) && (input = env[::Rack::RACK_INPUT]) and
-         input.rewind
-        env[PARAMS].merge!(::Rack::Utils.parse_nested_query(input.read))
-        input.rewind
-      end
-
-      env[PARAMS].merge!(
-        ::Rack::Utils.parse_nested_query(env[::Rack::QUERY_STRING])
-      )
+      # env[PARAMS].merge!(
+      #   ::Rack::Utils.parse_nested_query(env[::Rack::QUERY_STRING])
+      # )
       env[PARAMS].merge!(params)
-      #   env[PARAMS] = Params.deep_symbolize(env[PARAMS])
       env
     end
 
     DEFAULT_RESOLVER = ->(_, to) { to }
+    PARAMS = "router.params"
   end
 end

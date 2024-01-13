@@ -39,7 +39,7 @@ module Soliton
           found = node if captured
         end
 
-        [found, captured&.named_captures]
+        [found, captured]
       end
 
       def leaf?
