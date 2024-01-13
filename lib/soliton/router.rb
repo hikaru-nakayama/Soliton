@@ -22,10 +22,7 @@ module Soliton
     def call(env)
       endpoint, params = lookup(env)
 
-      [200, {}, ["Hello, World!"]]
-      #   return not_allowed(env) || not_found(env) unless endpoint
-
-      #   endpoint.call(_params(env, params)).to_a
+      endpoint.call(_params(env, params)).to_a
     end
 
     def lookup(env)
@@ -36,11 +33,11 @@ module Soliton
     end
 
     def fixed(env)
-      @fixed.dig(env[::Rack::REQUEST_METHOD], env[::Rack::PATH_INFO])
+      @fixed.dig(env["REQUEST_METHOD"], env["PATH_INFO"])
     end
 
     def variable(env)
-      @variable[env[::Rack::REQUEST_METHOD]]&.find(env[::Rack::PATH_INFO])
+      @variable[env["REQUEST_METHOD"]]&.find(env["PATH_INFO"])
     end
 
     def get(path, to: nil, &blk)

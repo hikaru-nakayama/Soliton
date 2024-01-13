@@ -7,8 +7,9 @@ require "soliton/router"
 module Soliton
   class App
     def self.start
-      # ここに middleware を追加する処理を書く
+      # Rack app の初期化
       app = Application.new(Router.instance)
+      # サーバーの起動
       server = Server.new(app)
       server.start
     end
