@@ -3,6 +3,7 @@ require "soliton/server"
 require "soliton/application"
 require "soliton/version"
 require "soliton/router"
+require 'soliton/action_controller/base'
 
 module Soliton
   class App
