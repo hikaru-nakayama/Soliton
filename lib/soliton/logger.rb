@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Soliton
   class Logger
     require "soliton/logger/formatter"

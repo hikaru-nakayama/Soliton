@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 require "soliton/server"
 require "soliton/application"
 require "soliton/version"
 require "soliton/router"
-require 'soliton/action_controller/base'
+require "soliton/action_controller/base"
 
 module Soliton
   class App
@@ -12,7 +13,7 @@ module Soliton
       app = Application.new(Router.instance)
 
       # config を読み込む
-      config_dir = File.expand_path('config', Dir.pwd)
+      config_dir = File.expand_path("config", Dir.pwd)
       Dir["#{config_dir}/**/*.rb"].each do |file|
         next if File.directory?(file)
 

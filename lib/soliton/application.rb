@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "singleton"
 module Soliton
   # Rackアプリケーション
@@ -27,7 +28,6 @@ module Soliton
         Configuration.instance
       end
     end
-
   end
 
   class Context

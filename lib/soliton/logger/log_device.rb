@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Soliton
   class Logger
     class LogDevice
@@ -14,7 +15,7 @@ module Soliton
 
       private
 
-      def set_dev(log)
+      def set_dev(log) # rubocop:disable Naming/AccessorMethodName
         log.respond_to?(:write) ? log : File.open(log, "w")
       end
     end

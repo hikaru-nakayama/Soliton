@@ -1,4 +1,6 @@
-require 'soliton/action_controller/helper'
+# frozen_string_literal: true
+
+require "soliton/action_controller/helper"
 
 # 利用方法は以下を想定
 # MyAction < Soliton::ActionController::Base

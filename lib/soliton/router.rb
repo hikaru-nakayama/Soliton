@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rack"
 require "rack/utils"
 require "singleton"
@@ -22,9 +24,7 @@ module Soliton
     def call(env)
       endpoint, params = lookup(env)
 
-      unless endpoint
-        return [404, {}, ["Not Found"]]
-      end
+      return 404, {}, ["Not Found"] unless endpoint
 
       endpoint.call(_params(env, params)).to_a
     end
