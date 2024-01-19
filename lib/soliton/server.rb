@@ -1,15 +1,15 @@
 # frozen_string_literal: true
+
 require "soliton/http/responder"
 require "soliton/http/request_parser"
 require "soliton/middleware/builder"
 require "soliton/middleware/cookie"
 require "socket"
 require "soliton/logger"
-require 'openssl'
-require 'singleton'
+require "openssl"
+require "singleton"
 module Soliton
   class Server
-
     class Configuration
       include Singleton
       attr_accessor :port, :host, :ssl_cert, :ssl_key, :ssl_enabled
@@ -28,16 +28,27 @@ module Soliton
       server_setting = Server::Configuration.instance
       application = @app
 
-      socket = server_setting.ssl_enabled ? listen_on_socket_with_ssl(server_setting.ssl_cert, server_setting.ssl_key) : listen_on_socket
+      socket =
+        (
+          if server_setting.ssl_enabled
+            listen_on_socket_with_ssl(
+              server_setting.ssl_cert,
+              server_setting.ssl_key
+            )
+          else
+            listen_on_socket
+          end
+        )
       logger = Logger.new($stdout)
       logger.info "Soliton is running on #{HOST}:#{PORT}"
       loop do # 新しいコネクションを継続的にリッスンする
         conn, _addr_info = socket.accept
         request = Http::RequestParser.call(conn)
-        builder = Soliton::Middleware::Builder.new do
-          use Soliton::Middleware::Cookie
-          run application
-        end
+        builder =
+          Soliton::Middleware::Builder.new do
+            use Soliton::Middleware::Cookie
+            run application
+          end
         status, headers, body = builder.call(request)
         Http::Responder.call(conn, status, headers, body)
       rescue StandardError => e

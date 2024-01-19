@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Soliton
   module Http
     class Responder
@@ -12,10 +14,8 @@ module Soliton
         conn.write("Content-Length: #{content_length}\r\n")
         headers.each_pair do |name, value|
           if value.is_a?(Array)
-            value.each do |v|
-              conn.write("#{name}: #{v}\r\n")
-            end
-          else 
+            value.each { |v| conn.write("#{name}: #{v}\r\n") }
+          else
             conn.write("#{name}: #{value}\r\n")
           end
         end

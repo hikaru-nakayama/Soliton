@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "uri"
 
 module Soliton
@@ -68,7 +70,7 @@ module Soliton
         def rack_headers(headers)
           # Rackは、全ヘッダーがHTTP_がプレフィックスされ
           # かつ大文字であることを期待する
-          headers.transform_keys {|key| "HTTP_#{key.upcase}" }
+          headers.transform_keys { |key| "HTTP_#{key.upcase}" }
         end
 
         def read_body(conn:, method:, headers:)

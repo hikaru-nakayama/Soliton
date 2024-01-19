@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Soliton
   module Middleware
     class Builder
@@ -8,7 +9,7 @@ module Soliton
       end
 
       def use(middleware, *args, &block)
-        @use << proc {|app| middleware.new(app, *args, &block) }
+        @use << proc { |app| middleware.new(app, *args, &block) }
       end
 
       def run(app)
@@ -22,7 +23,7 @@ module Soliton
       private
 
       def build_app
-        @use.reverse.inject(@app) {|a, e| e.call(a) }
+        @use.reverse.inject(@app) { |a, e| e.call(a) }
       end
     end
   end

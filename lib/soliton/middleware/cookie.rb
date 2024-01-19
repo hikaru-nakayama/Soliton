@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Soliton
   module Middleware
     class Cookie
@@ -8,17 +9,19 @@ module Soliton
 
       def call(env)
         cookie_jar = CookieJar.build(env, extract_cookies(env))
-        env['soliton.cookies'] = cookie_jar
+        env["soliton.cookies"] = cookie_jar
         status, headers, body = @app.call(env)
-        headers['Set-Cookie'] = cookie_jar.to_header
+        headers["Set-Cookie"] = cookie_jar.to_header
         [status, headers, body]
       end
 
       def extract_cookies(env)
-        env['HTTP_COOKIE'].split(';').reduce({}) do |acc, cookie|
-          key, value = cookie.split("=")
-          acc.update(key.strip => value.strip)
-        end
+        env["HTTP_COOKIE"]
+          .split(";")
+          .reduce({}) do |acc, cookie|
+            key, value = cookie.split("=")
+            acc.update(key.strip => value.strip)
+          end
       end
     end
   end
@@ -27,15 +30,13 @@ module Soliton
     def cookies
       # TODO: request の取得方法を変更する
       request = Soliton::Context.instance.context
-      request['soliton.cookies']
+      request["soliton.cookies"]
     end
   end
 
   class CookieJar
     def self.build(req, cookies)
-      new(req).tap do |hash|
-        hash.update(cookies)
-      end
+      new(req).tap { |hash| hash.update(cookies) }
     end
 
     attr_reader :request
@@ -64,7 +65,7 @@ module Soliton
         @set_cookies[name.to_s] = options
         @delete_cookies.delete(name.to_s)
       end
-        value
+      value
     end
 
     def update(other_hash)
@@ -74,7 +75,11 @@ module Soliton
 
     def to_header
       @set_cookies.map do |name, options|
-        formatted_options = options.except(:value).map { |key, value| "#{key}=#{value}" }.join("; ")
+        formatted_options =
+          options
+            .except(:value)
+            .map { |key, value| "#{key}=#{value}" }
+            .join("; ") # rubocop:disable Layout/MultilineMethodCallIndentation
         "#{name}=#{options[:value]}; #{formatted_options}"
       end
     end
