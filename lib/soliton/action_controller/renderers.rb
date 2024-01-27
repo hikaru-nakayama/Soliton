@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require "soliton/view/rendering"
 require "json"
 module Soliton
   module ActionController
     module Renderers
+      include Soliton::View::Rendering
       RENDERERS = Set.new
 
       def self.included(_mod)
@@ -29,8 +31,8 @@ module Soliton
       add :template do |rel_path|
         root_dir = Soliton::Application.config.root
         path = "#{root_dir}/views/#{rel_path}"
-        html = File.exist?(path) ? File.read(path) : nil
-        [html, "text/html"]
+        body = render_template(path)
+        [body, "text/html"]
       end
     end
   end

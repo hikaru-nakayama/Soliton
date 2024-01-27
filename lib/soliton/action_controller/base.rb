@@ -13,6 +13,13 @@ module Soliton
   module ActionController
     class Base
       include Helper
+
+      def view_assigns
+        variables = instance_variables
+        variables.each_with_object({}) do |name, hash|
+          hash[name.slice(1, name.length)] = instance_variable_get(name)
+        end
+      end
     end
   end
 end
