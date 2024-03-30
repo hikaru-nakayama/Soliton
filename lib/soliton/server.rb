@@ -8,6 +8,7 @@ require "socket"
 require "soliton/logger"
 require "openssl"
 require "singleton"
+require "soliton/error"
 module Soliton
   class Server
     class Configuration
@@ -27,6 +28,7 @@ module Soliton
     def start
       server_setting = Server::Configuration.instance
       application = @app
+      register_signal_handlers
 
       socket =
         (
@@ -42,7 +44,9 @@ module Soliton
       logger = Logger.new($stdout)
       logger.info "Soliton is running on #{HOST}:#{PORT}"
       loop do # 新しいコネクションを継続的にリッスンする
+        @status = "waiting"
         conn, _addr_info = socket.accept
+        @status = "running"
         request = Http::RequestParser.call(conn)
         builder =
           Soliton::Middleware::Builder.new do
@@ -51,11 +55,16 @@ module Soliton
           end
         status, headers, body = builder.call(request)
         Http::Responder.call(conn, status, headers, body)
+      rescue Soliton::TermException
+        # 何もしない
       rescue StandardError => e
         logger.error e
       ensure # コネクションを常にクローズする
         logger.info "Completed #{status} #{Http::Responder::STATUS_MESSAGES[status]}"
         conn&.close
+        if @shutdown
+          break
+        end
       end
     end
 
@@ -69,6 +78,29 @@ module Soliton
 
     def listen_on_socket
       TCPServer.new(HOST, PORT)
+    end
+
+    private
+
+    def register_signal_handlers
+      logger = Logger.new($stdout)
+      trap('TERM') do
+        logger.info "gracefull shutdown..."
+        @status == "waiting" ? shutdown! : shutdown
+      end
+      trap('INT') do
+        logger.info "gracefull shutdown..."
+        @status == "waiting" ? shutdown! : shutdown
+      end
+    end
+
+    def shutdown
+      @shutdown = true
+    end
+
+    def shutdown!
+      @shutdown = true
+      raise Soliton::TermException, "KILL"
     end
   end
 end
