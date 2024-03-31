@@ -47,19 +47,23 @@ module Soliton
         @status = "waiting"
         conn, _addr_info = socket.accept
         @status = "running"
-        fork do
-          request = Http::RequestParser.call(conn)
-          builder =
-            Soliton::Middleware::Builder.new do
-              use Soliton::Middleware::Cookie
-              run application
-            end
-          status, headers, body = builder.call(request)
-          Http::Responder.call(conn, status, headers, body)
-        rescue StandardError => e
-          logger.error e
-        ensure # コネクションを常にクローズする
-          logger.info "Completed #{status} #{Http::Responder::STATUS_MESSAGES[status]}"
+        if IO.select([conn], nil, nil, 5)
+          fork do
+            request = Http::RequestParser.call(conn)
+            builder =
+              Soliton::Middleware::Builder.new do
+                use Soliton::Middleware::Cookie
+                run application
+              end
+            status, headers, body = builder.call(request)
+            Http::Responder.call(conn, status, headers, body)
+          rescue StandardError => e
+            logger.error e
+          ensure # コネクションを常にクローズする
+            logger.info "Completed #{status} #{Http::Responder::STATUS_MESSAGES[status]}"
+            conn&.close
+          end
+        else
           conn&.close
         end
       rescue Soliton::TermException
