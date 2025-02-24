@@ -104,6 +104,5 @@ Layout/TrailingEmptyLines:
   Enabled: true
   EnforcedStyle: final_newline
 
-# https://freee.slack.com/archives/CBC4CUHPV/p1678276628653159
 Style/HashSyntax:
   EnforcedShorthandSyntax: either
